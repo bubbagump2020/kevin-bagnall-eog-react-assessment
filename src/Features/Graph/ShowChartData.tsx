@@ -7,17 +7,8 @@ import { useSelector, useDispatch } from 'react-redux'
 import { useQuery } from 'urql'
 import { LineChart, Line, XAxis, YAxis, ResponsiveContainer, Tooltip } from 'recharts'
 import { LinearProgress, Card, CardContent, Typography } from '@material-ui/core'
-
-const MEASUREMENTS_QUERY = `
-   query($input: MeasurementQuery){
-       getMeasurements(input: $input){
-           metric
-           at
-           value
-           unit
-       }
-   }
-`
+import { MEASUREMENTS_QUERY, GET_MULTIPLE_QUERY } from './Queries'
+import ShowMultiple from './ShowMultiple'
 
 const getLastKnownMeasurement = (state: IState) => {
         const lastMeasurement = state.metric.lastMeasurement
@@ -29,9 +20,15 @@ const getMeasurements = ( state: IState ) => {
     return { Measurements }
 }
 
+const getSelectedMetrics = ( state: IState ) => {
+    const selectedMetrics = state.metric.selectedMetrics
+    return { selectedMetrics }
+}
+
 const ShowChartData = () => {
 
-    const { lastMeasurement } = useSelector(getLastKnownMeasurement)
+    const dispatch = useDispatch()
+    const { lastMeasurement } = useSelector(getLastKnownMeasurement) // the last metric selected
     const  Measurements  = useSelector(getMeasurements)
     const visualData = Measurements.Measurements
 
@@ -49,8 +46,6 @@ const ShowChartData = () => {
         },
         pause: !lastMeasurement.metric,
     })
-
-    const dispatch = useDispatch()
 
     const { data, error } = result
     useEffect(() => {
@@ -97,10 +92,11 @@ const ShowChartData = () => {
           
     }
 
-    
+    // console.log(selectedMetrics)
     return(
         <div>
             {loadingData()}
+            <ShowMultiple />
             <ResponsiveContainer width="100%" height={800}>
                 <LineChart margin={{ bottom: 20 }}data={visualData}>
                     <Line dataKey="value" type="monotone" animationEasing="ease-out" strokeWidth={4}/>

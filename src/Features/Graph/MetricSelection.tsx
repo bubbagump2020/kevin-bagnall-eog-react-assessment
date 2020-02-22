@@ -1,43 +1,28 @@
 import React, {useEffect, useState } from 'react'
-import { FormControl, Checkbox, FormControlLabel, MenuItem, Select} from '@material-ui/core'
+import { FormControl, MenuItem, Select} from '@material-ui/core'
 import { actions } from './reducer'
-import { createClient, Provider, useQuery } from 'urql'
+import { Provider, useQuery } from 'urql'
 import { useDispatch, useSelector } from 'react-redux'
 import { IState } from '../../store'
 import Chip from '../../components/Chip'
 import ShowData from './ShowData'
-
-const client = createClient({
-    url: 'https://react.eogresources.com/graphql'
-})
-
-const METRICS_QUERY = `
-    query{
-        getMetrics
-    }
-`
+import { GET_METRICS_QUERY, CLIENT } from './Queries'
 
 const getOptions = (state: IState) => {
     const { metrics } = state.metric
     return { metrics }
 }
 
-const getMetricName = (state: IState) => {
-    const { name } = state.metric
-    return {name}
-}
-
 const MetricSelection = () => {
 
     const [result] = useQuery({
-        query: METRICS_QUERY
+        query: GET_METRICS_QUERY
     })
 
     const dispatch = useDispatch()
     const {data, fetching, error} = result
     const {metrics} = useSelector(getOptions)
     const [ selectedMetrics, setSelectedMetrics] = useState([]) 
-    const [isChecked, setIsChecked] = useState(false)
 
 
     useEffect(() => {
@@ -82,7 +67,7 @@ const MetricSelection = () => {
 
 export default () => {
     return(
-        <Provider value={client}>
+        <Provider value={CLIENT}>
          <MetricSelection />
         </Provider>
     )

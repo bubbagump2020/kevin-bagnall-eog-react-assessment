@@ -8,6 +8,10 @@ export type selectedMetrics = {
     selectedMetrics: string[]
 }
 
+export type selectedMetricsAndMeasurements = {
+    selectedMetricsAndMeasurements: any[]
+}
+
 export type LastKnownMeasurement = {
         metric: string,
         at: number,
@@ -27,14 +31,14 @@ export type ApiErrorAction = {
 const initialState = {
     metrics: [] as string[],
     selectedMetrics: [] as string[],
-    name: "",
     lastMeasurement: {
         metric: "",
         at: 0,
         value: 0.0,
         unit: ""
     },
-    Measurements: [] as Object[]
+    Measurements: [] as Object[],
+    selectedMetricsAndMeasurements: [] as any[]
 }
 
 const slice = createSlice({
@@ -49,6 +53,10 @@ const slice = createSlice({
         selectedMetrics: (state, action: PayloadAction<selectedMetrics>) => {
             const { selectedMetrics } = action.payload;
             state.selectedMetrics = selectedMetrics
+        },
+        selectedMetricsAndMeasurements: (state, action: PayloadAction<selectedMetricsAndMeasurements>) => {
+            const { selectedMetricsAndMeasurements } = action.payload;
+            state.selectedMetricsAndMeasurements = selectedMetricsAndMeasurements;
         },
         lastMeasurement: (state, action: PayloadAction<LastKnownMeasurement>) => {
             const { metric, at, value, unit } = action.payload;
