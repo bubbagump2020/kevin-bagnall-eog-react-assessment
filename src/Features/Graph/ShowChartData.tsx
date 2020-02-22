@@ -5,7 +5,7 @@ import { IState } from '../../store'
 import { actions } from './reducer'
 import { useSelector, useDispatch } from 'react-redux'
 import { useQuery } from 'urql'
-import { LineChart, Line, CartesianGrid, XAxis, YAxis, Label, ResponsiveContainer } from 'recharts'
+import { LineChart, Line, XAxis, YAxis, ResponsiveContainer } from 'recharts'
 import { LinearProgress } from '@material-ui/core'
 
 const MEASUREMENTS_QUERY = `
@@ -33,6 +33,7 @@ const ShowChartData = () => {
 
     const { lastMeasurement } = useSelector(getLastKnownMeasurement)
     const  Measurements  = useSelector(getMeasurements)
+    const visualData = Measurements.Measurements
 
     const timeLimit = new Date()
     const input = {
@@ -51,7 +52,7 @@ const ShowChartData = () => {
 
     const dispatch = useDispatch()
 
-    const { fetching, data, error } = result
+    const { data, error } = result
     useEffect(() => {
         if(error){
             console.log(error)
@@ -72,9 +73,7 @@ const ShowChartData = () => {
        return moment(ticks).format('HH:mm')
     }
 
-
-
-    const visualData = Measurements.Measurements
+    
     return(
         <div>
             {loadingData()}
