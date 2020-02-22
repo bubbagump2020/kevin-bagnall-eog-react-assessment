@@ -1,5 +1,5 @@
 import React, {useEffect, useState } from 'react'
-import { FormControl, Checkbox, FormControlLabel} from '@material-ui/core'
+import { FormControl, Checkbox, FormControlLabel, MenuItem, Select} from '@material-ui/core'
 import { actions } from './reducer'
 import { createClient, Provider, useQuery } from 'urql'
 import { useDispatch, useSelector } from 'react-redux'
@@ -22,6 +22,11 @@ const getOptions = (state: IState) => {
     return { metrics }
 }
 
+const getMetricName = (state: IState) => {
+    const { name } = state.metric
+    return {name}
+}
+
 const MetricSelection = () => {
 
     const [result] = useQuery({
@@ -31,6 +36,7 @@ const MetricSelection = () => {
     const dispatch = useDispatch()
     const {data, fetching, error} = result
     const {metrics} = useSelector(getOptions)
+    const [ selectedMetrics, setSelectedMetrics] = useState([]) 
     const [isChecked, setIsChecked] = useState(false)
 
 
@@ -47,11 +53,7 @@ const MetricSelection = () => {
         } else {
             return metrics.map((metric: string) => {
                 return(
-                    <FormControlLabel key={metric} control={
-                        <Checkbox onChange={e => handleChange(e)} value={metric}/>
-                    }
-                    label={metric}
-                    />
+                    <MenuItem key={metric} value={metric}>{metric}</MenuItem>
                 )
             })
         }
@@ -59,24 +61,18 @@ const MetricSelection = () => {
     }
 
     const handleChange = (event: any) => {
-        if ( isChecked === false ){
-            setIsChecked(true)
-            dispatch(actions.selectedMetric({ name: event.target.value }))
-        }
-        if ( isChecked === true ){
-            setIsChecked(false)
-            dispatch(actions.selectedMetric({ name: "" }))
-            dispatch(actions.lastMeasurement({ metric: "", at: 0, value: 0, unit: ""}))
-        }
+        setSelectedMetrics(event.target.value)
+        dispatch(actions.selectedMetrics({ selectedMetrics: event.target.value}))
     }
-
 
     if (fetching) return <Chip />
 
     return (
         <div>
             <FormControl >
-                {showMetricOptions()}
+                <Select onChange={handleChange} value={ selectedMetrics } multiple>
+                    {showMetricOptions()}
+                </Select>
             </FormControl>
             <ShowData />
         </div>

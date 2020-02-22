@@ -3,7 +3,6 @@
 This assessment was bespoke handcrafted for kevin-bagnall.
 
 ## To do List
-- Add information on hover in Chart
 - Multiple Metric Selections
 - Try to change the graphql polling to a subscription
 - Try to use Prettier
