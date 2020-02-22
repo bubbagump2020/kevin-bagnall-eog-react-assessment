@@ -1,42 +1,30 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { IState } from '../../store'
 import { actions } from './reducer'
 import { useDispatch, useSelector } from 'react-redux'
 import { createClient, useQuery, Provider } from 'urql'
 import Graph from './Graph'
-
-const client = createClient({
-    url: 'https://react.eogresources.com/graphql'
-})
-
-const LAST_KNOWN_MEASUREMENT_QUERY = `
-   query($metricName: String!){
-       getLastKnownMeasurement(metricName: $metricName){
-           metric
-           at
-           value
-           unit
-       }
-   } 
-`
+import { LAST_KNOWN_MEASUREMENT_QUERY, CLIENT } from './Queries'
 
 const getMetric = (state: IState) => {
-    const { name } = state.metric
-    return { name }
+    const { selectedMetrics } = state.metric
+    return { selectedMetrics }
 }
 
 const ShowData = () => {
 
     const dispatch = useDispatch()
-    const { name } = useSelector(getMetric)
-    const metricName = name
+    const metricsObjectArray = useSelector(getMetric)
+    const metricsArray = metricsObjectArray.selectedMetrics
+    const lastKnownMetric = metricsArray[metricsArray.length - 1]
+
 
     const [result] = useQuery({
         query: LAST_KNOWN_MEASUREMENT_QUERY,
         variables: {
-            metricName,
+            metricName: lastKnownMetric,
         },
-        pause: !metricName,
+        pause: !lastKnownMetric,
         pollInterval: 5000,
         requestPolicy: 'cache-and-network',
     })
@@ -44,15 +32,12 @@ const ShowData = () => {
     const { data, error} = result
     useEffect(() => {
         if(error){
-            console.log(error)
+            dispatch(actions.metricApiErrorReceived({ error: error.message}))
         }
         if (!data) return
         const { getLastKnownMeasurement } = data
         dispatch(actions.lastMeasurement(getLastKnownMeasurement))
     }, [dispatch, data, error])
-
- 
-
     return(
         <div>
             <Graph />
@@ -63,7 +48,7 @@ const ShowData = () => {
 
 export default () => {
     return(
-        <Provider value={client}>
+        <Provider value={CLIENT}>
             <ShowData />
         </Provider>
     )
