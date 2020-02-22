@@ -17,8 +17,6 @@ const METRICS_QUERY = `
     }
 `
 
-
-
 const getOptions = (state: IState) => {
     const { metrics } = state.metric
     return { metrics }
@@ -85,8 +83,6 @@ const MetricSelection = () => {
     )
    
 }
-
-
 
 export default () => {
     return(
