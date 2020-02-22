@@ -19,6 +19,6 @@ This assessment was bespoke handcrafted for kevin-bagnall.
 - Toasty errors
 - Using starter code
 - Run free of Console errors (Just clean up my imports)
-
+- Add information on hover in Chart
 
 Read more about this assessment [here](https://react.eogresources.com)
