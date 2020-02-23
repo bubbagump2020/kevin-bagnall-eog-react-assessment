@@ -55,7 +55,18 @@ const MetricSelection = () => {
     return (
         <div>
             <FormControl >
-                <Select onChange={handleChange} value={ selectedMetrics } multiple>
+                <Select
+                    onChange={handleChange}
+                    value={ selectedMetrics }
+                    multiple
+                    renderValue={(selected: any)=> (
+                        <div>
+                            {selected.map((value: any) =>(
+                                <Chip key={value} label={value} />
+                            ))}
+                        </div>
+                    )}
+                >
                     {showMetricOptions()}
                 </Select>
             </FormControl>

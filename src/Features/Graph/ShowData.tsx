@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { IState } from '../../store'
 import { actions } from './reducer'
 import { useDispatch, useSelector } from 'react-redux'
-import { createClient, useQuery, Provider } from 'urql'
+import { useQuery, Provider } from 'urql'
 import Graph from './Graph'
 import { LAST_KNOWN_MEASUREMENT_QUERY, CLIENT } from './Queries'
 
@@ -25,8 +25,8 @@ const ShowData = () => {
             metricName: lastKnownMetric,
         },
         pause: !lastKnownMetric,
-        pollInterval: 5000,
-        requestPolicy: 'cache-and-network',
+        pollInterval: 1000,
+        requestPolicy: 'network-only',
     })
 
     const { data, error} = result
@@ -38,12 +38,22 @@ const ShowData = () => {
         const { getLastKnownMeasurement } = data
         dispatch(actions.lastMeasurement(getLastKnownMeasurement))
     }, [dispatch, data, error])
+
+    const showGraph = () => {
+        if(metricsArray.length > 0){
+            return <Graph />
+        } else {
+            return 
+        }
+    }
+    
     return(
         <div>
-            <Graph />
+            {showGraph()}
         </div>
     )
 }
+
 
 
 export default () => {
