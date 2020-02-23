@@ -1,14 +1,14 @@
-import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { actions } from './reducer';
-import { Provider, createClient, useQuery } from 'urql';
-import { useGeolocation } from 'react-use';
-import LinearProgress from '@material-ui/core/LinearProgress';
-import Chip from '../../components/Chip';
-import { IState } from '../../store';
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { actions } from "./reducer";
+import { Provider, createClient, useQuery } from "urql";
+import { useGeolocation } from "react-use";
+import LinearProgress from "@material-ui/core/LinearProgress";
+import Chip from "../../components/Chip";
+import { IState } from "../../store";
 
 const client = createClient({
-  url: 'https://react.eogresources.com/graphql',
+  url: "https://react.eogresources.com/graphql"
 });
 
 const query = `
@@ -26,7 +26,7 @@ const getWeather = (state: IState) => {
   return {
     temperatureinFahrenheit,
     description,
-    locationName,
+    locationName
   };
 };
 
@@ -43,16 +43,18 @@ const Weather = () => {
   // Default to houston
   const latLong = {
     latitude: getLocation.latitude || 29.7604,
-    longitude: getLocation.longitude || -95.3698,
+    longitude: getLocation.longitude || -95.3698
   };
   const dispatch = useDispatch();
-  const { temperatureinFahrenheit, description, locationName } = useSelector(getWeather);
+  const { temperatureinFahrenheit, description, locationName } = useSelector(
+    getWeather
+  );
 
   const [result] = useQuery({
     query,
     variables: {
-      latLong,
-    },
+      latLong
+    }
   });
   const { fetching, data, error } = result;
   useEffect(() => {
@@ -67,5 +69,9 @@ const Weather = () => {
 
   if (fetching) return <LinearProgress />;
 
-  return <Chip label={`Weather in ${locationName}: ${description} and ${temperatureinFahrenheit}°`} />;
+  return (
+    <Chip
+      label={`Weather in ${locationName}: ${description} and ${temperatureinFahrenheit}°`}
+    />
+  );
 };

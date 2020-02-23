@@ -2,10 +2,10 @@
 
 This assessment was bespoke handcrafted for kevin-bagnall.
 
-## To do List
+## To do List 
 - Multiple Metric Selections
 - Try to change the graphql polling to a subscription
-- Try to use Prettier
+
 
 
 ## Completed
@@ -19,5 +19,6 @@ This assessment was bespoke handcrafted for kevin-bagnall.
 - Using starter code
 - Run free of Console errors (Just clean up my imports)
 - Add information on hover in Chart
+- Prettier used
 
 Read more about this assessment [here](https://react.eogresources.com)
