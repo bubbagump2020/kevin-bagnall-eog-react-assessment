@@ -1,4 +1,4 @@
-import { createClient } from "urql"
+import { createClient } from "urql";
 
 export const LAST_KNOWN_MEASUREMENT_QUERY = `
     query($metricName: String!){
@@ -9,7 +9,7 @@ export const LAST_KNOWN_MEASUREMENT_QUERY = `
             unit
         }
     }
-`
+`;
 
 export const MEASUREMENTS_QUERY = `
     query($input: MeasurementQuery){
@@ -20,13 +20,13 @@ export const MEASUREMENTS_QUERY = `
             unit
         }
     }
-`
+`;
 
 export const GET_METRICS_QUERY = `
     query{
         getMetrics
     }
-`
+`;
 export const GET_MULTIPLE_QUERY = `
     query($input: [MeasurementQuery]){
         getMultipleMeasurements(input: $input){
@@ -34,9 +34,8 @@ export const GET_MULTIPLE_QUERY = `
             measurements
         }
     }
-`
-
+`;
 
 export const CLIENT = createClient({
-    url: 'https://react.eogresources.com/graphql'
-})
+  url: "https://react.eogresources.com/graphql"
+});
