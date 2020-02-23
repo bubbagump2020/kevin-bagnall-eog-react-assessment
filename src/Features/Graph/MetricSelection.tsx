@@ -46,7 +46,6 @@ const MetricSelection = () => {
     }
 
     const handleChange = (event: any) => {
-        console.log(event.target.value)
         setSelectedMetrics(event.target.value)
         dispatch(actions.selectedMetrics({ selectedMetrics: event.target.value}))
     }

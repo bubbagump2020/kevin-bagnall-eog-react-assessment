@@ -7,8 +7,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { useQuery } from 'urql'
 import { LineChart, Line, XAxis, YAxis, ResponsiveContainer, Tooltip } from 'recharts'
 import { LinearProgress, Card, CardContent, Typography } from '@material-ui/core'
-import { MEASUREMENTS_QUERY, GET_MULTIPLE_QUERY } from './Queries'
-import ShowMultiple from './ShowMultiple'
+import { MEASUREMENTS_QUERY } from './Queries'
 
 const getLastKnownMeasurement = (state: IState) => {
         const lastMeasurement = state.metric.lastMeasurement
@@ -20,45 +19,29 @@ const getMeasurements = ( state: IState ) => {
     return { Measurements }
 }
 
-// const getSelectedMetrics = ( state: IState ) => {
-//     const selectedMetrics = state.metric.selectedMetrics
-//     return { selectedMetrics }
-// }
 
 const ShowChartData = () => {
 
     const dispatch = useDispatch()
-    const { lastMeasurement } = useSelector(getLastKnownMeasurement) // the last metric selected
+    const { lastMeasurement } = useSelector(getLastKnownMeasurement)
 
     const  Measurements  = useSelector(getMeasurements)
     const visualData = Measurements.Measurements
 
     const timeLimit = new Date()
 
-    // need array of these for showing multiple data lines 
     const input = {
         metricName: lastMeasurement.metric,
         after: lastMeasurement.at - 1800000,
         before: timeLimit.getTime() - 10000,
     }
 
-    const multiInput = visualData.slice(0, 99)
-
     const [result] = useQuery({
-        // the actual query for data
         query: MEASUREMENTS_QUERY,
         variables: {
             input,
         },
         pause: !lastMeasurement.metric,
-    })
-
-    const [multiResult] = useQuery({
-        query: GET_MULTIPLE_QUERY,
-        variables:{
-            multiInput
-        },
-        pause: !lastMeasurement.metric
     })
 
     const { data, error } = result
@@ -85,7 +68,6 @@ const ShowChartData = () => {
     const renderToolTip = (data: any) => {
         if(data.payload[0] !== undefined){
             const toolTipData = (data.payload[0].payload)
-            console.log(data)
             const toolTime = moment(toolTipData.at).format('MMMM do YYYY, h:mm:ss a')
             return(
                 <Card>
@@ -103,17 +85,12 @@ const ShowChartData = () => {
                 </Card>
             )
         }
+    }
             
           
-    }
-    
-    // console.log(visualData.slice(0, 49))
-    console.log(multiResult)
-
     return(
         <div>
             {loadingData()}
-            <ShowMultiple />
             <ResponsiveContainer width="100%" height={800}>
                 <LineChart margin={{ bottom: 20 }}data={visualData.slice(0, 99)}>
                     <Line dataKey="value" type="monotone" animationEasing="ease-out" strokeWidth={4}/>

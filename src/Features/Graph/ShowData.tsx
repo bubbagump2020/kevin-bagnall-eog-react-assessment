@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { IState } from '../../store'
 import { actions } from './reducer'
 import { useDispatch, useSelector } from 'react-redux'
@@ -14,7 +14,6 @@ const getMetric = (state: IState) => {
 const ShowData = () => {
 
     const dispatch = useDispatch()
-    const [selectedMetricsArray, setSelectedMetricsArray] = useState([] as any)
     const metricsObjectArray = useSelector(getMetric)
     const metricsArray = metricsObjectArray.selectedMetrics
     const lastKnownMetric = metricsArray[metricsArray.length - 1]
@@ -23,7 +22,6 @@ const ShowData = () => {
     const [result] = useQuery({
         query: LAST_KNOWN_MEASUREMENT_QUERY,
         variables: {
-            // sending a string from an array. the last string in the array.
             metricName: lastKnownMetric,
         },
         pause: !lastKnownMetric,
@@ -38,13 +36,8 @@ const ShowData = () => {
         }
         if (!data) return
         const { getLastKnownMeasurement } = data
-        selectedMetricsArray.push( getLastKnownMeasurement )
         dispatch(actions.lastMeasurement(getLastKnownMeasurement))
     }, [dispatch, data, error])
-
-    const dispatchSelectedMetrics = (selectedMetrics: any) => {
-        return dispatch(actions.selectedMetricsAndMeasurements(selectedMetrics))
-    }
 
     const showGraph = () => {
         if(metricsArray.length > 0){
@@ -56,7 +49,6 @@ const ShowData = () => {
     
     return(
         <div>
-            {/* {dispatchSelectedMetrics(selectedMetricsArray)} */}
             {showGraph()}
         </div>
     )
