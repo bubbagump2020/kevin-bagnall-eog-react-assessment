@@ -6,8 +6,6 @@ This assessment was bespoke handcrafted for kevin-bagnall.
 - Multiple Metric Selections
 - Try to change the graphql polling to a subscription
 
-
-
 ## Completed
 - Use React Hooks
 - Use Redux
@@ -22,3 +20,7 @@ This assessment was bespoke handcrafted for kevin-bagnall.
 - Prettier used
 
 Read more about this assessment [here](https://react.eogresources.com)
+
+## Notes
+
+This was a fun challenge. Thank you EOG for giving me the opportunity to undertake it. I learned several new things and sharpened the skills that I have already.
